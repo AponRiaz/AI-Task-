@@ -1,0 +1,45 @@
+graph = {
+        'A' : [('Z',75),('T',118),('S',140)],
+        'S' : [('R',80),('F',99)],
+        'F' : [('B',211)],
+        'Z' : [('O',71)]
+}
+
+H_table = {
+        'A' : 366,
+        'S' : 253,
+        'T' : 329,
+        'Z' : 374,
+        'R' : 193,
+        'O' : 380,
+        'F' : 176,
+        'B' : 0
+
+}
+
+def path_h_cost(path):
+    g_cost = 0
+    for (node,cost)in path:
+        g_cost += cost
+    last_node = path[-1][0]
+    h_cost =H_table[last_node]
+    return h_cost,last_node
+
+def Greedy_best_search(graph,start,goal):
+  visited =[]
+  queue =[[(start,0)]]
+  while queue:
+    queue.sort(key=path_h_cost)
+    path= queue.pop(0)
+    node = path[-1][0]
+    if node in visited:
+      continue
+    visited.append(node)
+    if node==goal:
+      return path
+    else:
+      adjacent_nodes =graph.get(node, [])
+      for(node2,cost)in adjacent_nodes:
+         new_path =path.copy()
+         new_path.append((node2,cost))
+         queue.append (new_path)
